@@ -5,6 +5,7 @@ import cv2
 import numpy as np
 import pkg_resources
 import torch
+import torch.jit
 from torchvision.transforms import transforms
 
 from deep_sort_realtime.embedder.mobilenetv2_bottle import MobileNetV2_bottle
@@ -20,7 +21,7 @@ INPUT_WIDTH = 224
 def batch(iterable, bs=1):
     l = len(iterable)
     for ndx in range(0, l, bs):
-        yield iterable[ndx : min(ndx + bs, l)]
+        yield iterable[ndx: min(ndx + bs, l)]
 
 
 class MobileNetv2_Embedder(object):
@@ -60,6 +61,9 @@ class MobileNetv2_Embedder(object):
 
         self.max_batch_size = max_batch_size
         self.bgr = bgr
+
+        # jit go brrr
+        self.model = torch.jit.script(self.model)
 
         logger.info("MobileNetV2 Embedder for Deep Sort initialised")
         logger.info(f"- gpu enabled: {self.gpu}")
