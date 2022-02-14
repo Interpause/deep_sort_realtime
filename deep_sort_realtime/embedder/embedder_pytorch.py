@@ -62,8 +62,13 @@ class MobileNetv2_Embedder(object):
         self.max_batch_size = max_batch_size
         self.bgr = bgr
 
-        # jit go brrr
-        self.model = torch.jit.script(self.model)
+        # tracing produces simpler code than scripting at lost of control flow
+        # model is simplistic & doesnt contain control flow so this is fine
+        # https://nvidia.github.io/Torch-TensorRT/tutorials/creating_torchscript_module_in_python.html#working-with-torchscript-in-python
+        # torch-tensorrt optimizes traced modules better
+        # eventually will test using tensorrt for even more performance
+        self.model = torch.jit.trace(
+            self.model, torch.zeros((self.max_batch_size, 3, INPUT_WIDTH, INPUT_WIDTH), dtype=torch.float16, device='cuda'))
 
         logger.info("MobileNetV2 Embedder for Deep Sort initialised")
         logger.info(f"- gpu enabled: {self.gpu}")
