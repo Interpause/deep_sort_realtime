@@ -1,7 +1,22 @@
 from setuptools import setup, find_packages
+from pkg_resources import DistributionNotFound, get_distribution
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
+
+ALT_OPENCV = (
+    "opencv-contrib-python",
+    "opencv-contrib-python-headless",
+    "opencv-python",
+)
+
+opencv_install = "opencv-python-headless"
+for alt in ALT_OPENCV:
+    try:
+        get_distribution(alt)
+        opencv_install = alt
+    except DistributionNotFound:
+        pass
 
 setup(
     name="deep-sort-realtime",
@@ -25,9 +40,5 @@ setup(
             "weights/download_tf_wts.sh",
         ]
     },
-    install_requires=[
-        "numpy",
-        "scipy",
-        "opencv-python",
-    ],
+    install_requires=["numpy", "scipy", opencv_install],
 )
