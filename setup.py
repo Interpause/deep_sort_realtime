@@ -15,8 +15,11 @@ for alt in ALT_OPENCV:
     try:
         get_distribution(alt)
         opencv_install = alt
+        break
     except DistributionNotFound:
+        print(alt + " not found!")
         pass
+print(opencv_install + " chosen")
 
 setup(
     name="deep-sort-realtime",
