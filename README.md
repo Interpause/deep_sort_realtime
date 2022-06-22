@@ -1,5 +1,9 @@
 # Deep SORT
 
+## Archived
+
+This fork uses JIT tracing on the PyTorch embedder for negligable performance improvements. It also tries to fix the OpenCV dependency resolution. Ultimately, use <https://github.com/tryolabs/norfair> instead, which provides a more general framework for tracking (within which, multiple techniques, such as Deep SORT can be implemented more easily).
+
 ## Introduction
 
 A more realtime adaptation of Deep SORT.
